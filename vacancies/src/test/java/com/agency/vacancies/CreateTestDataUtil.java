@@ -20,6 +20,7 @@ public class CreateTestDataUtil {
                     .companyName("Google")
                     .title("Data Engineer")
                     .announcedDateTime(LocalDateTime.of(2023,12,31,8,30))
+                    .companyId(1L)
                     .build();
         }
 
@@ -29,6 +30,7 @@ public class CreateTestDataUtil {
                 .companyName("Twilio")
                 .title("Software Engineer")
                 .announcedDateTime(LocalDateTime.of(2023,12,1,8,30))
+                .companyId(2L)
                 .build();
     }
 }

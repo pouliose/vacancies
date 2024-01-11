@@ -16,8 +16,8 @@ create table "vacancies" (
     "id" bigint default nextval('vacancies_id_seq') not null,
     "company" text,
     "title" text,
-    "announcedDate" timestamp,
-    company_id bigint,
+    "announcedtime" timestamp,
+    "company_id" bigint,
     constraint "vacancies_pkey" primary key ("id"),
     constraint "fk_company" foreign key(company_id)
     references companies(id)

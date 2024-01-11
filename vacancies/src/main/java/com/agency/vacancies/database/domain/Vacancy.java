@@ -16,5 +16,5 @@ public class Vacancy {
     private String companyName;
     private String title;
     private LocalDateTime announcedDateTime;
-
+    private Long companyId;
 }

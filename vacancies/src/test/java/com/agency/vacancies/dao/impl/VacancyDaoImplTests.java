@@ -19,24 +19,21 @@ import static org.mockito.Mockito.verify;
 public class VacancyDaoImplTests {
     @Mock
     private JdbcTemplate jdbcTemplate;
-
     @InjectMocks
     private VacancyDaoIml underTest;
 
     @Test
     public void testThatCreateVacancyGeneratesCorrectSQL() {
         Vacancy vacancy = CreateTestDataUtil.createTestVacancyA();
-
         underTest.create(vacancy);
-
-        verify(jdbcTemplate).update(eq("INSERT INTO vacancies (id, company, title, dateTime) VALUES (?,?,?,?)"), eq(1L), eq("Google"), eq("Data Engineer"), eq(LocalDateTime.of(2023, 12, 31, 8, 30)));
+        verify(jdbcTemplate).update(eq("INSERT INTO vacancies (id, company, title, announcedtime, company_id) VALUES (?,?,?,?,?)"), eq(1L), eq("Google"), eq("Data Engineer"), eq(LocalDateTime.of(2023, 12, 31, 8, 30)), eq(1L));
     }
 
     @Test
     public void testThatUpdateGeneratesCorrectSql() {
         Vacancy vacancy = CreateTestDataUtil.createTestVacancyB();
         underTest.update(2L, vacancy);
-        verify(jdbcTemplate).update("UPDATE vacancies SET id=?, company=?, title=?, announcedDate=? WHERE id=?", 2L, "Twilio", "Software Engineer", LocalDateTime.of(2023, 12, 1, 8, 30), 2L);
+        verify(jdbcTemplate).update("UPDATE vacancies SET id=?, company=?, title=?, announcedtime=?, company_id=? WHERE id=?", 2L, "Twilio", "Software Engineer", LocalDateTime.of(2023, 12, 1, 8, 30), 2L, 2L);
     }
 
     @Test

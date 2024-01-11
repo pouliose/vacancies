@@ -3,10 +3,11 @@ package com.agency.vacancies.database.dao.impl;
 import com.agency.vacancies.database.dao.CompanyDao;
 import com.agency.vacancies.database.domain.Company;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
-
+@Component
 public class CompanyDaoImpl implements CompanyDao {
     private final JdbcTemplate jdbcTemplate;
 
