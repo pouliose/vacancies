@@ -1,5 +1,6 @@
-package com.agency.vacancies.database.domain;
+package com.agency.vacancies.domain;
 
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,10 +12,18 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Entity
+@Table(name="vacancies")
 public class Vacancy {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "vacancy_id_seq")
     private Long id;
     private String companyName;
     private String title;
     private LocalDateTime announcedDateTime;
-    private Long companyId;
+
+    @ManyToOne(cascade=CascadeType.ALL)
+    @JoinColumn(name="author_id")
+    private Company company;
 }

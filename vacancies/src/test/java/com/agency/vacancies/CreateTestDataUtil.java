@@ -1,7 +1,7 @@
 package com.agency.vacancies;
 
-import com.agency.vacancies.database.domain.Company;
-import com.agency.vacancies.database.domain.Vacancy;
+import com.agency.vacancies.domain.Company;
+import com.agency.vacancies.domain.Vacancy;
 
 import java.time.LocalDateTime;
 
@@ -14,23 +14,23 @@ public class CreateTestDataUtil {
                     .build();
         }
 
-        public static Vacancy createTestVacancyA(){
+        public static Vacancy createTestVacancyA(final Company company){
             return Vacancy.builder()
                     .id(1L)
                     .companyName("Google")
                     .title("Data Engineer")
                     .announcedDateTime(LocalDateTime.of(2023,12,31,8,30))
-                    .companyId(1L)
+                    .company(company)
                     .build();
         }
 
-    public static Vacancy createTestVacancyB(){
+    public static Vacancy createTestVacancyB(final Company company){
         return Vacancy.builder()
                 .id(2L)
                 .companyName("Twilio")
                 .title("Software Engineer")
                 .announcedDateTime(LocalDateTime.of(2023,12,1,8,30))
-                .companyId(2L)
+                .company(company)
                 .build();
     }
 }
