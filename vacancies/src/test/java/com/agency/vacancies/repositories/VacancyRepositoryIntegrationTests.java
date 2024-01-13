@@ -1,8 +1,8 @@
 package com.agency.vacancies.repositories;
 
 import com.agency.vacancies.CreateTestDataUtil;
-import com.agency.vacancies.domain.Company;
-import com.agency.vacancies.domain.Vacancy;
+import com.agency.vacancies.entites.Company;
+import com.agency.vacancies.entites.Vacancy;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,19 +18,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ExtendWith(SpringExtension.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class VacancyRepositoryIntegrationTests {
-    private final CompanyRepository companyRepository;
     private final VacancyRepository underTest;
 
     @Autowired
-    public VacancyRepositoryIntegrationTests(CompanyRepository companyRepository, VacancyRepository underTest) {
-        this.companyRepository = companyRepository;
+    public VacancyRepositoryIntegrationTests(VacancyRepository underTest) {
         this.underTest = underTest;
     }
 
     @Test
     public void testThatVacancyCanBeCreatedAndRecalled() {
         Company company = CreateTestDataUtil.createTestCompanyA();
-        companyRepository.save(company);
         Vacancy vacancy = CreateTestDataUtil.createTestVacancyA(company);
         vacancy.setCompany(company);
         underTest.save(vacancy);
@@ -39,37 +36,32 @@ public class VacancyRepositoryIntegrationTests {
         assertThat(result.get()).isEqualTo(vacancy);
     }
 
-//    @Test
-//    public void testThatMultipleVacanciesCanBeCreatedAndRecalled() {
-//        Company company = CreateTestDataUtil.createTestCompanyA();
-//        companyDao.create(company);
-//
-//        Vacancy vacancyA = CreateTestDataUtil.createTestVacancyA();
-//        vacancyA.setCompanyId(company.getId());
-//        underTest.create(vacancyA);
-//
-//        Vacancy vacancyB = CreateTestDataUtil.createTestVacancyB();
-//        vacancyB.setCompanyId(company.getId());
-//        underTest.create(vacancyB);
-//
-//        List<Vacancy> result = underTest.findAll();
-//        assertThat(result).hasSize(2).containsExactly(vacancyA, vacancyB);
-//    }
-//
-//    public void testThatVacancyCanBeUpdated(){
-//        Company company = CreateTestDataUtil.createTestCompanyA();
-//        companyDao.create(company);
-//
-//        Vacancy vacancyA = CreateTestDataUtil.createTestVacancyA();
-//        vacancyA.setCompanyId(company.getId());
-//        underTest.create(vacancyA);
-//
-//        vacancyA.setTitle("Data Warehouse Engineer");
-//        underTest.update(vacancyA.getId(),vacancyA);
-//
-//        Optional<Vacancy> result = underTest.findOne(vacancyA.getId());
-//        assertThat(result).isPresent();
-//        assertThat(result.get()).isEqualTo(vacancyA);
-//
-//    }
+    @Test
+    public void testThatMultipleVacanciesCanBeCreatedAndRecalled() {
+        Company company = CreateTestDataUtil.createTestCompanyA();
+
+        Vacancy vacancyA = CreateTestDataUtil.createTestVacancyA(company);
+        Vacancy vacancyB = CreateTestDataUtil.createTestVacancyB(company);
+
+        underTest.save(vacancyA);
+        underTest.save(vacancyB);
+
+        Iterable<Vacancy> result = underTest.findAll();
+        result.forEach(System.out::println);
+        assertThat(result).hasSize(2).containsExactlyInAnyOrder(vacancyA, vacancyB);
+    }
+
+    @Test
+    public void testThatVacancyCanBeUpdated() {
+        Company company = CreateTestDataUtil.createTestCompanyA();
+        Vacancy vacancy = CreateTestDataUtil.createTestVacancyA(company);
+        underTest.save(vacancy);
+
+        vacancy.setTitle("NEWVALUE");
+        underTest.save(vacancy);
+
+        Optional<Vacancy> result = underTest.findById(vacancy.getId());
+        assertThat(result).isPresent();
+        assertThat(result.get()).isEqualTo(vacancy);
+    }
 }

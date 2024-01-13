@@ -1,4 +1,4 @@
-package com.agency.vacancies.domain;
+package com.agency.vacancies.entites;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

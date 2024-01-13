@@ -1,7 +1,7 @@
 package com.agency.vacancies;
 
-import com.agency.vacancies.domain.Company;
-import com.agency.vacancies.domain.Vacancy;
+import com.agency.vacancies.entites.Company;
+import com.agency.vacancies.entites.Vacancy;
 
 import java.time.LocalDateTime;
 
@@ -13,6 +13,20 @@ public class CreateTestDataUtil {
                     .name("Google")
                     .build();
         }
+
+    public static Company createTestCompanyB(){
+        return Company.builder()
+                .id(2L)
+                .name("Syntax")
+                .build();
+    }
+
+    public static Company createTestCompanyC(){
+        return Company.builder()
+                .id(3L)
+                .name("Cisco")
+                .build();
+    }
 
         public static Vacancy createTestVacancyA(final Company company){
             return Vacancy.builder()
