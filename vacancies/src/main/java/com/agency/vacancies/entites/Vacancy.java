@@ -1,5 +1,7 @@
 package com.agency.vacancies.entites;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,6 +15,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 @Entity
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Table(name="vacancies")
 public class Vacancy {
 
@@ -21,6 +24,7 @@ public class Vacancy {
     private Long id;
     private String companyName;
     private String title;
+    @JsonProperty("announcedTime")
     private LocalDateTime announcedDateTime;
 
     @ManyToOne(cascade=CascadeType.ALL)
