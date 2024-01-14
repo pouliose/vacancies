@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -63,5 +64,20 @@ public class VacancyRepositoryIntegrationTests {
         Optional<Vacancy> result = underTest.findById(vacancy.getId());
         assertThat(result).isPresent();
         assertThat(result.get()).isEqualTo(vacancy);
+    }
+
+    @Test
+    public void testThatGetVacanciesWithAnnouncedDateTimePreviousThan() {
+        Company company = CreateTestDataUtil.createTestCompanyA();
+
+        Vacancy vacancyA = CreateTestDataUtil.createTestVacancyA(company);
+        underTest.save(vacancyA);
+        Vacancy vacancyB = CreateTestDataUtil.createTestVacancyB(company);
+        underTest.save(vacancyB);
+        Vacancy vacancyC = CreateTestDataUtil.createTestVacancyC(company);
+        underTest.save(vacancyC);
+
+        Iterable<Vacancy> result = underTest.announcedDateTimeLessThan(LocalDateTime.of(2024, 1, 13, 8, 30));
+        assertThat(result).containsExactlyInAnyOrder(vacancyA, vacancyB);
     }
 }

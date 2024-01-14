@@ -47,4 +47,14 @@ public class CreateTestDataUtil {
                 .company(company)
                 .build();
     }
+
+    public static Vacancy createTestVacancyC(final Company company){
+        return Vacancy.builder()
+                .id(3L)
+                .companyName("Amazon")
+                .title("Software Engineer Level II")
+                .announcedDateTime(LocalDateTime.of(2024,1,14,8,30))
+                .company(company)
+                .build();
+    }
 }
