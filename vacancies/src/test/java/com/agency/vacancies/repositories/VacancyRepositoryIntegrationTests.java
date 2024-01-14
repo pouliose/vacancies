@@ -80,4 +80,49 @@ public class VacancyRepositoryIntegrationTests {
         Iterable<Vacancy> result = underTest.announcedDateTimeLessThan(LocalDateTime.of(2024, 1, 13, 8, 30));
         assertThat(result).containsExactlyInAnyOrder(vacancyA, vacancyB);
     }
+
+    @Test
+    public void testThatGetVacanciesWithAnnouncedDateTimeLaterThan() {
+        Company company = CreateTestDataUtil.createTestCompanyA();
+
+        Vacancy vacancyA = CreateTestDataUtil.createTestVacancyA(company);
+        underTest.save(vacancyA);
+        Vacancy vacancyB = CreateTestDataUtil.createTestVacancyB(company);
+        underTest.save(vacancyB);
+        Vacancy vacancyC = CreateTestDataUtil.createTestVacancyC(company);
+        underTest.save(vacancyC);
+
+        Iterable<Vacancy> result = underTest.findVacanciesWithAnnouncedDateTimeMoreThan(LocalDateTime.of(2023, 12, 15, 8, 30));
+        assertThat(result).containsExactlyInAnyOrder(vacancyC, vacancyA);
+    }
+
+    @Test
+    public void testThatGetVacanciesWithTitleContainingKeywordHQL() {
+        Company company = CreateTestDataUtil.createTestCompanyA();
+
+        Vacancy vacancyA = CreateTestDataUtil.createTestVacancyA(company);
+        underTest.save(vacancyA);
+        Vacancy vacancyB = CreateTestDataUtil.createTestVacancyB(company);
+        underTest.save(vacancyB);
+        Vacancy vacancyC = CreateTestDataUtil.createTestVacancyC(company);
+        underTest.save(vacancyC);
+
+        Iterable<Vacancy> result = underTest.findByTitleContainingHQL("Software");
+        assertThat(result).containsExactlyInAnyOrder(vacancyB, vacancyC);
+    }
+
+    @Test
+    public void testThatGetVacanciesWithTitleContainingKeyword() {
+        Company company = CreateTestDataUtil.createTestCompanyA();
+
+        Vacancy vacancyA = CreateTestDataUtil.createTestVacancyA(company);
+        underTest.save(vacancyA);
+        Vacancy vacancyB = CreateTestDataUtil.createTestVacancyB(company);
+        underTest.save(vacancyB);
+        Vacancy vacancyC = CreateTestDataUtil.createTestVacancyC(company);
+        underTest.save(vacancyC);
+
+        Iterable<Vacancy> result = underTest.findByTitleContaining("Engineer");
+        assertThat(result).containsExactlyInAnyOrder(vacancyA, vacancyB, vacancyC);
+    }
 }
