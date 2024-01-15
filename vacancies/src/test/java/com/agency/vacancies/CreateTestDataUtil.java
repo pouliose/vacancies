@@ -1,7 +1,7 @@
 package com.agency.vacancies;
 
-import com.agency.vacancies.entites.Company;
-import com.agency.vacancies.entites.Vacancy;
+import com.agency.vacancies.domain.entities.Company;
+import com.agency.vacancies.domain.entities.Vacancy;
 
 import java.time.LocalDateTime;
 
