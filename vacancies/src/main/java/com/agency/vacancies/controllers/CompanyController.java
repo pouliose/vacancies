@@ -4,6 +4,8 @@ import com.agency.vacancies.domain.dto.CompanyDto;
 import com.agency.vacancies.domain.entities.Company;
 import com.agency.vacancies.mappers.Mapper;
 import com.agency.vacancies.services.CompanyService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,9 +27,9 @@ public class CompanyController {
     }
 
     @PostMapping(path="/companies")
-    public CompanyDto createCompany(@RequestBody CompanyDto companyDto){
+    public ResponseEntity<CompanyDto> createCompany(@RequestBody CompanyDto companyDto){
         Company company = companyMapper.mapFrom(companyDto);
         Company companySaved = companyService.createCompany(company);
-        return companyMapper.mapTo(companySaved);
+        return new ResponseEntity(companyMapper.mapTo(companySaved), HttpStatus.CREATED);
     }
 }
