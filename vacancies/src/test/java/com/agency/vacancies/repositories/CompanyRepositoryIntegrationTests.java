@@ -1,7 +1,7 @@
 package com.agency.vacancies.repositories;
 
 import com.agency.vacancies.CreateTestDataUtil;
-import com.agency.vacancies.entites.Company;
+import com.agency.vacancies.domain.entities.Company;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;

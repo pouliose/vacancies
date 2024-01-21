@@ -1,4 +1,4 @@
-package com.agency.vacancies.entites;
+package com.agency.vacancies.domain.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -22,12 +22,11 @@ public class Vacancy {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "vacancy_id_seq")
     private Long id;
-    private String companyName;
     private String title;
     @JsonProperty("announcedTime")
     private LocalDateTime announcedDateTime;
 
     @ManyToOne(cascade=CascadeType.ALL)
-    @JoinColumn(name="author_id")
+    @JoinColumn(name="company_id")
     private Company company;
 }

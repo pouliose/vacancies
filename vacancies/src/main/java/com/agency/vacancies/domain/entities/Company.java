@@ -1,4 +1,4 @@
-package com.agency.vacancies.entites;
+package com.agency.vacancies.domain.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
