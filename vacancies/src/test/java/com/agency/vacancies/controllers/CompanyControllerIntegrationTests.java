@@ -2,6 +2,7 @@ package com.agency.vacancies.controllers;
 
 import com.agency.vacancies.CreateTestDataUtil;
 import com.agency.vacancies.domain.entities.Company;
+import com.agency.vacancies.services.CompanyService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -22,13 +23,17 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 @AutoConfigureMockMvc
 public class CompanyControllerIntegrationTests {
     private MockMvc mockMvc;
+
+    private CompanyService companyService;
     private ObjectMapper objectMapper;
 
     @Autowired
-    public CompanyControllerIntegrationTests(MockMvc mockMvc, ObjectMapper objectMapper) {
+    public CompanyControllerIntegrationTests(MockMvc mockMvc, CompanyService companyService, ObjectMapper objectMapper) {
         this.mockMvc = mockMvc;
+        this.companyService = companyService;
         this.objectMapper = objectMapper;
     }
+
     @Test
     public void testThatCreateCompanySuccesfullyReturnsHttp201Create() throws Exception {
         Company testCompanyA = CreateTestDataUtil.createTestCompanyA();
@@ -37,9 +42,9 @@ public class CompanyControllerIntegrationTests {
 
         mockMvc.perform(
                 MockMvcRequestBuilders
-                .post("/companies")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(testCompanyAJson)
+                        .post("/api/companies")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(testCompanyAJson)
         ).andExpect(
                 MockMvcResultMatchers.status().isCreated()
         );
@@ -53,7 +58,7 @@ public class CompanyControllerIntegrationTests {
 
         mockMvc.perform(
                 MockMvcRequestBuilders
-                        .post("/companies")
+                        .post("/api/companies")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(testCompanyAJson)
         ).andExpect(
@@ -61,6 +66,29 @@ public class CompanyControllerIntegrationTests {
         ).andExpect(
                 MockMvcResultMatchers.jsonPath("$.name").value(testCompanyA.getName())
         );
+    }
+
+    @Test
+    public void testThatListCompaniesReturnsHttpStatus200() throws Exception {
+        mockMvc.perform(
+                        MockMvcRequestBuilders.get("/api/companies")
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    public void testThatListCompaniesReturnsListOfCompanies() throws Exception {
+        Company companyA = CreateTestDataUtil.createTestCompanyA();
+        companyService.createCompany(companyA);
+
+        mockMvc.perform(
+                        MockMvcRequestBuilders.get("/api/companies")
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(
+                        MockMvcResultMatchers.jsonPath("$[0].id").isNumber()
+                ).andExpect(
+                        MockMvcResultMatchers.jsonPath("$[0].name").value(companyA.getName())
+                );
     }
 
 }

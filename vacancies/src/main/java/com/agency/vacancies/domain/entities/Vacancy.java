@@ -22,12 +22,11 @@ public class Vacancy {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "vacancy_id_seq")
     private Long id;
-    private String companyName;
     private String title;
     @JsonProperty("announcedTime")
     private LocalDateTime announcedDateTime;
 
     @ManyToOne(cascade=CascadeType.ALL)
-    @JoinColumn(name="author_id")
+    @JoinColumn(name="company_id")
     private Company company;
 }

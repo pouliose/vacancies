@@ -5,6 +5,10 @@ import com.agency.vacancies.repositories.CompanyRepository;
 import com.agency.vacancies.services.CompanyService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
 @Service
 public class CompanyServiceImpl implements CompanyService {
 
@@ -17,5 +21,14 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public Company createCompany(Company company) {
         return companyRepository.save(company);
+    }
+
+    @Override
+    public List<Company> findAll() {
+        return StreamSupport
+                .stream(
+                        companyRepository.findAll().spliterator(),
+                        false)
+                .collect(Collectors.toList());
     }
 }

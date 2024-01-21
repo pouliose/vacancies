@@ -1,5 +1,7 @@
 package com.agency.vacancies;
 
+import com.agency.vacancies.domain.dto.CompanyDto;
+import com.agency.vacancies.domain.dto.VacancyDto;
 import com.agency.vacancies.domain.entities.Company;
 import com.agency.vacancies.domain.entities.Vacancy;
 
@@ -28,22 +30,29 @@ public class CreateTestDataUtil {
                 .build();
     }
 
-        public static Vacancy createTestVacancyA(final Company company){
-            return Vacancy.builder()
-                    .id(1L)
-                    .companyName("Google")
-                    .title("Data Engineer")
-                    .announcedDateTime(LocalDateTime.of(2023,12,31,8,30))
-                    .company(company)
-                    .build();
-        }
+    public static Vacancy createTestVacancyA(final Company company){
+        return Vacancy.builder()
+                .id(1L)
+                .title("Data Engineer")
+                .announcedDateTime(LocalDateTime.of(2023,12,31,8,30, 25))
+                .company(company)
+                .build();
+    }
+
+    public static VacancyDto createTestVacancyDtoA(final CompanyDto company){
+        return VacancyDto.builder()
+                .id(1L)
+                .title("Data Engineer")
+                .announcedDateTime(LocalDateTime.of(2023,12,31,8,30, 25))
+                .company(company)
+                .build();
+    }
 
     public static Vacancy createTestVacancyB(final Company company){
         return Vacancy.builder()
                 .id(2L)
-                .companyName("Twilio")
                 .title("Software Engineer")
-                .announcedDateTime(LocalDateTime.of(2023,12,1,8,30))
+                .announcedDateTime(LocalDateTime.of(2023,12,1,8,30, 25))
                 .company(company)
                 .build();
     }
@@ -51,9 +60,8 @@ public class CreateTestDataUtil {
     public static Vacancy createTestVacancyC(final Company company){
         return Vacancy.builder()
                 .id(3L)
-                .companyName("Amazon")
                 .title("Software Engineer Level II")
-                .announcedDateTime(LocalDateTime.of(2024,1,14,8,30))
+                .announcedDateTime(LocalDateTime.of(2024,1,14,8,30, 25))
                 .company(company)
                 .build();
     }

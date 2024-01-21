@@ -6,12 +6,13 @@ import com.agency.vacancies.mappers.Mapper;
 import com.agency.vacancies.services.CompanyService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
+@RequestMapping(path="/api")
 public class CompanyController {
     private CompanyService companyService;
     private Mapper<Company, CompanyDto> companyMapper;
@@ -30,6 +31,16 @@ public class CompanyController {
     public ResponseEntity<CompanyDto> createCompany(@RequestBody CompanyDto companyDto){
         Company company = companyMapper.mapFrom(companyDto);
         Company companySaved = companyService.createCompany(company);
-        return new ResponseEntity(companyMapper.mapTo(companySaved), HttpStatus.CREATED);
+        CompanyDto companyDtoSaved = companyMapper.mapTo(companySaved);
+        return new ResponseEntity(companyDtoSaved, HttpStatus.CREATED);
+    }
+
+    @GetMapping(path="/companies")
+    public List<CompanyDto> listCompanies(){
+        List<Company> companies = companyService.findAll();
+        return companies
+                .stream()
+                .map(companyMapper::mapTo)
+                .collect(Collectors.toList());
     }
 }
