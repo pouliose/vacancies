@@ -1,6 +1,5 @@
 package com.agency.vacancies.controllers;
 
-import com.agency.vacancies.domain.dto.CompanyDto;
 import com.agency.vacancies.domain.dto.VacancyDto;
 import com.agency.vacancies.domain.entities.Vacancy;
 import com.agency.vacancies.mappers.Mapper;
@@ -9,8 +8,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RestController
-@RequestMapping(path="/api")
+@RequestMapping(path = "/api")
 public class VacancyController {
     private Mapper<Vacancy, VacancyDto> vacancyMapper;
     private VacancyService vacancyService;
@@ -36,5 +38,15 @@ public class VacancyController {
         Vacancy vacancySaved = vacancyService.updateVacancy(vacancy);
         VacancyDto vacancyDtoSaved = vacancyMapper.mapTo(vacancySaved);
         return new ResponseEntity(vacancyDtoSaved, HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/vacancies")
+    public List<VacancyDto> getListVacancies() {
+        List<Vacancy> vacancies = vacancyService.findAll();
+
+        return vacancies.stream()
+                .map(vacancyMapper::mapTo)
+                .collect(Collectors.toList());
+
     }
 }

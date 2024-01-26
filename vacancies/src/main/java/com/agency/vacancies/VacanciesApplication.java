@@ -8,8 +8,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @Log
 public class VacanciesApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(VacanciesApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(VacanciesApplication.class, args);
+    }
 
 }
