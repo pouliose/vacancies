@@ -3,12 +3,14 @@ package com.agency.vacancies.controllers;
 import com.agency.vacancies.domain.dto.CompanyDto;
 import com.agency.vacancies.domain.entities.Company;
 import com.agency.vacancies.mappers.Mapper;
+import com.agency.vacancies.repositories.CompanyRepository;
 import com.agency.vacancies.services.CompanyService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -16,10 +18,13 @@ import java.util.stream.Collectors;
 public class CompanyController {
     private CompanyService companyService;
     private Mapper<Company, CompanyDto> companyMapper;
+    private final CompanyRepository companyRepository;
 
-    public CompanyController(CompanyService companyService, Mapper<Company, CompanyDto> companyMapper) {
+    public CompanyController(CompanyService companyService, Mapper<Company, CompanyDto> companyMapper,
+                             CompanyRepository companyRepository) {
         this.companyService = companyService;
         this.companyMapper = companyMapper;
+        this.companyRepository = companyRepository;
     }
 
     @GetMapping(path = "/")
@@ -42,5 +47,16 @@ public class CompanyController {
                 .stream()
                 .map(companyMapper::mapTo)
                 .collect(Collectors.toList());
+    }
+
+    @GetMapping(path = "/companies/{id}")
+    public ResponseEntity<CompanyDto> getCompany(@PathVariable("id") Long id) {
+        Optional<Company> companyFound = companyService.findOne(id);
+
+        return companyFound.map(company -> {
+                    CompanyDto companyDto = companyMapper.mapTo(company);
+                    return new ResponseEntity<>(companyDto, HttpStatus.OK);
+                })
+                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 }

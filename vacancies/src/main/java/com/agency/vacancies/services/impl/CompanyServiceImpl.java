@@ -6,6 +6,7 @@ import com.agency.vacancies.services.CompanyService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -30,5 +31,10 @@ public class CompanyServiceImpl implements CompanyService {
                         companyRepository.findAll().spliterator(),
                         false)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Optional<Company> findOne(Long id) {
+        return companyRepository.findById(id);
     }
 }

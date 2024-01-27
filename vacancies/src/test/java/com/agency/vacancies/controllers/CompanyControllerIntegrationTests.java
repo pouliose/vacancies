@@ -3,7 +3,6 @@ package com.agency.vacancies.controllers;
 import com.agency.vacancies.CreateTestDataUtil;
 import com.agency.vacancies.domain.entities.Company;
 import com.agency.vacancies.services.CompanyService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -35,7 +34,7 @@ public class CompanyControllerIntegrationTests {
     }
 
     @Test
-    public void testThatCreateCompanySuccesfullyReturnsHttp201Create() throws Exception {
+    public void testThatCreateCompanySuccessfullyReturnsHttp201Create() throws Exception {
         Company testCompanyA = CreateTestDataUtil.createTestCompanyA();
         testCompanyA.setId(null);
         String testCompanyAJson = objectMapper.writeValueAsString(testCompanyA);
@@ -51,7 +50,7 @@ public class CompanyControllerIntegrationTests {
     }
 
     @Test
-    public void testThatCreateCompanySuccesfullyReturnsSavedCompany() throws Exception {
+    public void testThatCreateCompanySuccessfullyReturnsSavedCompany() throws Exception {
         Company testCompanyA = CreateTestDataUtil.createTestCompanyA();
         testCompanyA.setId(null);
         String testCompanyAJson = objectMapper.writeValueAsString(testCompanyA);
@@ -89,6 +88,40 @@ public class CompanyControllerIntegrationTests {
                 ).andExpect(
                         MockMvcResultMatchers.jsonPath("$[0].name").value(companyA.getName())
                 );
+    }
+
+    @Test
+    public void testThatGetCompanyReturnsHttpStatus200WhenCompanyExists() throws Exception {
+        Company companyA = CreateTestDataUtil.createTestCompanyA();
+        companyService.createCompany(companyA);
+
+        mockMvc.perform(
+                        MockMvcRequestBuilders.get("/api/companies/1")
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    public void testThatGetCompanyReturnsCompanyWhenCompanyExists() throws Exception {
+        Company companyA = CreateTestDataUtil.createTestCompanyA();
+        companyService.createCompany(companyA);
+
+        mockMvc.perform(
+                        MockMvcRequestBuilders.get("/api/companies/1")
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(
+                        MockMvcResultMatchers.jsonPath("$.id").value(1)
+                ).andExpect(
+                        MockMvcResultMatchers.jsonPath("$.name").value(companyA.getName())
+                );
+    }
+
+    @Test
+    public void testThatGetCompanyReturnsHttpStatus404WhenAnyCompanyExists() throws Exception {
+       mockMvc.perform(
+                        MockMvcRequestBuilders.get("/api/companies/1")
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 
 }
