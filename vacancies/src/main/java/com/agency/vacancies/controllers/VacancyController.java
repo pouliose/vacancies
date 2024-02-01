@@ -27,7 +27,7 @@ public class VacancyController {
         Vacancy vacancy = vacancyMapper.mapFrom(vacancyDto);
         Vacancy vacancySaved = vacancyService.createVacancy(vacancy);
         VacancyDto vacancyDtoSaved = vacancyMapper.mapTo(vacancySaved);
-        return new ResponseEntity(vacancyDtoSaved, HttpStatus.CREATED);
+        return new ResponseEntity<>(vacancyDtoSaved, HttpStatus.CREATED);
     }
 
     @PutMapping(path = "/vacancies/{id}")
@@ -37,7 +37,7 @@ public class VacancyController {
         Vacancy vacancy = vacancyMapper.mapFrom(vacancyDto);
         Vacancy vacancySaved = vacancyService.updateVacancy(vacancy);
         VacancyDto vacancyDtoSaved = vacancyMapper.mapTo(vacancySaved);
-        return new ResponseEntity(vacancyDtoSaved, HttpStatus.OK);
+        return new ResponseEntity<>(vacancyDtoSaved, HttpStatus.OK);
     }
 
     @GetMapping(path = "/vacancies")
@@ -47,6 +47,5 @@ public class VacancyController {
         return vacancies.stream()
                 .map(vacancyMapper::mapTo)
                 .collect(Collectors.toList());
-
     }
 }
