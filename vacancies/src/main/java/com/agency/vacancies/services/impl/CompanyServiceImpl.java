@@ -20,7 +20,7 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public Company createCompany(Company company) {
+    public Company saveCompany(Company company) {
         return companyRepository.save(company);
     }
 
@@ -36,5 +36,10 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public Optional<Company> findOne(Long id) {
         return companyRepository.findById(id);
+    }
+
+    @Override
+    public boolean isExists(Long id) {
+        return companyRepository.existsById(id);
     }
 }

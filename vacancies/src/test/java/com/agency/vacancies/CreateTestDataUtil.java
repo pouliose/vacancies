@@ -65,4 +65,18 @@ public class CreateTestDataUtil {
                 .company(company)
                 .build();
     }
+
+    public static CompanyDto createTestCompanyDtoA() {
+        return CompanyDto.builder()
+                .id(1L)
+                .name("Google")
+                .build();
+    }
+
+    public static CompanyDto createTestCompanyDtoB(){
+        return CompanyDto.builder()
+                .id(2L)
+                .name("Syntax")
+                .build();
+    }
 }

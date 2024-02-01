@@ -6,9 +6,11 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CompanyService {
-    Company createCompany(Company company);
+    Company saveCompany(Company company);
 
     List<Company> findAll();
 
     Optional<Company> findOne(Long id);
+
+    boolean isExists(Long id);
 }

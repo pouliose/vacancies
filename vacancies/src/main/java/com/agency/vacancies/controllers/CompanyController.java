@@ -35,7 +35,7 @@ public class CompanyController {
     @PostMapping(path = "/companies")
     public ResponseEntity<CompanyDto> createCompany(@RequestBody CompanyDto companyDto) {
         Company company = companyMapper.mapFrom(companyDto);
-        Company companySaved = companyService.createCompany(company);
+        Company companySaved = companyService.saveCompany(company);
         CompanyDto companyDtoSaved = companyMapper.mapTo(companySaved);
         return new ResponseEntity(companyDtoSaved, HttpStatus.CREATED);
     }
@@ -59,4 +59,21 @@ public class CompanyController {
                 })
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
+
+    @PutMapping(path = "/companies/{id}")
+    public ResponseEntity<CompanyDto> fullUpdateCompany(@PathVariable("id") Long id, @RequestBody CompanyDto companyDto) {
+        if (!companyService.isExists(id)) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        companyDto.setId(id);
+        Company company = companyMapper.mapFrom(companyDto);
+        Company savedCompany = companyService.saveCompany(company);
+
+        return  new ResponseEntity<>(
+                companyMapper.mapTo(savedCompany),
+                HttpStatus.OK);
+
+    }
+
 }
