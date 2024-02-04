@@ -10,4 +10,8 @@ public interface VacancyService {
     Vacancy updateVacancy(Vacancy vacancy);
 
     List<Vacancy> findAll();
+
+    boolean isExists(long id);
+
+    Vacancy partialUpdateVacancy(Long id, Vacancy vacancy);
 }

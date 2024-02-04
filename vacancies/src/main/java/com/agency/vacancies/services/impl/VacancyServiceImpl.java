@@ -1,15 +1,14 @@
 package com.agency.vacancies.services.impl;
 
-import com.agency.vacancies.domain.dto.VacancyDto;
-import com.agency.vacancies.domain.entities.Company;
 import com.agency.vacancies.domain.entities.Vacancy;
-import com.agency.vacancies.repositories.CompanyRepository;
+
 import com.agency.vacancies.repositories.VacancyRepository;
 import com.agency.vacancies.services.VacancyService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -42,4 +41,21 @@ public class VacancyServiceImpl implements VacancyService {
                         vacancyRepository.findAll().spliterator(), false)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public boolean isExists(long id) {
+        return vacancyRepository.existsById(id);
+    }
+
+    @Override
+    public Vacancy partialUpdateVacancy(Long id, Vacancy vacancy) {
+        vacancy.setId(id);
+
+        return vacancyRepository.findById(id).map((existing) -> {
+            Optional.ofNullable(vacancy.getTitle()).ifPresent(existing::setTitle);
+            Optional.ofNullable(vacancy.getAnnouncedDateTime()).ifPresent(existing::setAnnouncedDateTime);
+            return vacancyRepository.save(existing);
+        }).orElseThrow(()-> new RuntimeException("Vacancy does not exist"));
+    }
+
 }

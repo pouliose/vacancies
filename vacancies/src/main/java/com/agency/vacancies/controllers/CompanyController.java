@@ -37,7 +37,7 @@ public class CompanyController {
         Company company = companyMapper.mapFrom(companyDto);
         Company companySaved = companyService.saveCompany(company);
         CompanyDto companyDtoSaved = companyMapper.mapTo(companySaved);
-        return new ResponseEntity(companyDtoSaved, HttpStatus.CREATED);
+        return new ResponseEntity<>(companyDtoSaved, HttpStatus.CREATED);
     }
 
     @GetMapping(path = "/companies")
@@ -73,7 +73,6 @@ public class CompanyController {
         return  new ResponseEntity<>(
                 companyMapper.mapTo(savedCompany),
                 HttpStatus.OK);
-
     }
 
 }
