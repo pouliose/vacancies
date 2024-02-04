@@ -34,10 +34,29 @@ public class VacancyController {
     public ResponseEntity<VacancyDto> updateVacancy(
             @PathVariable("id") Long id,
             @RequestBody VacancyDto vacancyDto) {
+
+        if(!vacancyService.isExists(id)){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        vacancyDto.setId(id);
         Vacancy vacancy = vacancyMapper.mapFrom(vacancyDto);
         Vacancy vacancySaved = vacancyService.updateVacancy(vacancy);
         VacancyDto vacancyDtoSaved = vacancyMapper.mapTo(vacancySaved);
         return new ResponseEntity<>(vacancyDtoSaved, HttpStatus.OK);
+    }
+
+    @PatchMapping(path="/vacancies/{id}")
+    public ResponseEntity<VacancyDto> partialUpdateVacancy(@PathVariable("id") Long id, @RequestBody VacancyDto vacancyDto) {
+        if(!vacancyService.isExists(id)){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        Vacancy vacancy = vacancyMapper.mapFrom(vacancyDto);
+        Vacancy vacancyUpdated = vacancyService.partialUpdateVacancy(id, vacancy);
+
+        return new ResponseEntity<>(vacancyMapper.mapTo(vacancyUpdated), HttpStatus.OK);
+
     }
 
     @GetMapping(path = "/vacancies")
