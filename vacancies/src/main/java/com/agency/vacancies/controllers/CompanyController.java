@@ -70,9 +70,15 @@ public class CompanyController {
         Company company = companyMapper.mapFrom(companyDto);
         Company savedCompany = companyService.saveCompany(company);
 
-        return  new ResponseEntity<>(
+        return new ResponseEntity<>(
                 companyMapper.mapTo(savedCompany),
                 HttpStatus.OK);
+    }
+
+    @DeleteMapping(path = "/companies/{id}")
+    public ResponseEntity deleteCompany(@PathVariable("id") Long id) {
+        companyService.delete(id);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
 }
