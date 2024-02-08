@@ -14,4 +14,6 @@ public interface VacancyService {
     boolean isExists(long id);
 
     Vacancy partialUpdateVacancy(Long id, Vacancy vacancy);
+
+    void delete(Long id);
 }

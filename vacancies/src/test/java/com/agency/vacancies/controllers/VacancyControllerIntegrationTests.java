@@ -38,8 +38,8 @@ public class VacancyControllerIntegrationTests {
 
     @Test
     public void testThatCreateVacancyReturnsHttpStatus201Created() throws Exception {
-        VacancyDto vacancyDto = CreateTestDataUtil.createTestVacancyDtoA(null);
-        String createVacancyJson = objectMapper.writeValueAsString(vacancyDto);
+        VacancyDto testVacancyDtoA = CreateTestDataUtil.createTestVacancyDtoA(null);
+        String createVacancyJson = objectMapper.writeValueAsString(testVacancyDtoA);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/vacancies")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -50,18 +50,18 @@ public class VacancyControllerIntegrationTests {
 
     @Test
     public void testThatCreateVacancyReturnsCreateVacancy() throws Exception {
-        VacancyDto vacancyDto = CreateTestDataUtil.createTestVacancyDtoA(null);
-        String createVacancyJson = objectMapper.writeValueAsString(vacancyDto);
+        VacancyDto testVacancyDtoA = CreateTestDataUtil.createTestVacancyDtoA(null);
+        String createVacancyJson = objectMapper.writeValueAsString(testVacancyDtoA);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/vacancies")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(createVacancyJson)
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$.id").value(vacancyDto.getId())
+                MockMvcResultMatchers.jsonPath("$.id").value(testVacancyDtoA.getId())
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$.title").value(vacancyDto.getTitle())
+                MockMvcResultMatchers.jsonPath("$.title").value(testVacancyDtoA.getTitle())
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$.announcedDateTime").value(vacancyDto.getAnnouncedDateTime().toString())
+                MockMvcResultMatchers.jsonPath("$.announcedDateTime").value(testVacancyDtoA.getAnnouncedDateTime().toString())
         );
     }
 
@@ -76,27 +76,46 @@ public class VacancyControllerIntegrationTests {
 
     @Test
     public void testThatGetListVacanciesReturnsVacancies() throws Exception {
-        Vacancy vacancy1 = CreateTestDataUtil.createTestVacancyA(null);
-        vacancyService.createVacancy(vacancy1);
+        Vacancy testVacancyA = CreateTestDataUtil.createTestVacancyA(null);
+        vacancyService.createVacancy(testVacancyA);
 
-        Vacancy vacancy2 = CreateTestDataUtil.createTestVacancyB(null);
-        vacancyService.createVacancy(vacancy2);
+        Vacancy testVacancyB = CreateTestDataUtil.createTestVacancyB(null);
+        vacancyService.createVacancy(testVacancyB);
 
         mockMvc.perform(
                 MockMvcRequestBuilders.get("/api/vacancies")
                         .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$[0].id").value(vacancy1.getId())
+                MockMvcResultMatchers.jsonPath("$[0].id").value(testVacancyA.getId())
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$[0].title").value(vacancy1.getTitle())
+                MockMvcResultMatchers.jsonPath("$[0].title").value(testVacancyA.getTitle())
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$[0].announcedDateTime").value(vacancy1.getAnnouncedDateTime().toString())
+                MockMvcResultMatchers.jsonPath("$[0].announcedDateTime").value(testVacancyA.getAnnouncedDateTime().toString())
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$[1].id").value(vacancy2.getId())
+                MockMvcResultMatchers.jsonPath("$[1].id").value(testVacancyB.getId())
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$[1].title").value(vacancy2.getTitle())
+                MockMvcResultMatchers.jsonPath("$[1].title").value(testVacancyB.getTitle())
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$[1].announcedDateTime").value(vacancy2.getAnnouncedDateTime().toString())
+                MockMvcResultMatchers.jsonPath("$[1].announcedDateTime").value(testVacancyB.getAnnouncedDateTime().toString())
         );
+    }
+
+    @Test
+    public void testThatDeleteVacancyReturnsHttpStatus204ForNonExistingVacancy() throws Exception {
+        mockMvc.perform(
+                MockMvcRequestBuilders.delete("/api/vacancies/99")
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(MockMvcResultMatchers.status().isNoContent());
+    }
+
+    @Test
+    public void testThatDeleteVacancyReturnsHttpStatus204ForAnExistingVacancy() throws Exception {
+        Vacancy testVacancyA = CreateTestDataUtil.createTestVacancyA(null);
+        vacancyService.createVacancy(testVacancyA);
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.delete("/api/vacancies/" + testVacancyA.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(MockMvcResultMatchers.status().isNoContent());
     }
 }

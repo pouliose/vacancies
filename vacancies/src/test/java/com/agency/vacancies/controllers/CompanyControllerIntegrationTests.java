@@ -78,8 +78,8 @@ public class CompanyControllerIntegrationTests {
 
     @Test
     public void testThatListCompaniesReturnsListOfCompanies() throws Exception {
-        Company companyA = CreateTestDataUtil.createTestCompanyA();
-        companyService.saveCompany(companyA);
+        Company testCompanyA = CreateTestDataUtil.createTestCompanyA();
+        companyService.saveCompany(testCompanyA);
 
         mockMvc.perform(
                         MockMvcRequestBuilders.get("/api/companies")
@@ -87,14 +87,14 @@ public class CompanyControllerIntegrationTests {
                 .andExpect(
                         MockMvcResultMatchers.jsonPath("$[0].id").isNumber()
                 ).andExpect(
-                        MockMvcResultMatchers.jsonPath("$[0].name").value(companyA.getName())
+                        MockMvcResultMatchers.jsonPath("$[0].name").value(testCompanyA.getName())
                 );
     }
 
     @Test
     public void testThatGetCompanyReturnsHttpStatus200WhenCompanyExists() throws Exception {
-        Company companyA = CreateTestDataUtil.createTestCompanyA();
-        companyService.saveCompany(companyA);
+        Company testCompanyA = CreateTestDataUtil.createTestCompanyA();
+        companyService.saveCompany(testCompanyA);
 
         mockMvc.perform(
                         MockMvcRequestBuilders.get("/api/companies/1")
@@ -104,8 +104,8 @@ public class CompanyControllerIntegrationTests {
 
     @Test
     public void testThatGetCompanyReturnsCompanyWhenCompanyExists() throws Exception {
-        Company companyA = CreateTestDataUtil.createTestCompanyA();
-        companyService.saveCompany(companyA);
+        Company testCompanyA = CreateTestDataUtil.createTestCompanyA();
+        companyService.saveCompany(testCompanyA);
 
         mockMvc.perform(
                         MockMvcRequestBuilders.get("/api/companies/1")
@@ -113,7 +113,7 @@ public class CompanyControllerIntegrationTests {
                 .andExpect(
                         MockMvcResultMatchers.jsonPath("$.id").value(1)
                 ).andExpect(
-                        MockMvcResultMatchers.jsonPath("$.name").value(companyA.getName())
+                        MockMvcResultMatchers.jsonPath("$.name").value(testCompanyA.getName())
                 );
     }
 
@@ -171,6 +171,25 @@ public class CompanyControllerIntegrationTests {
                 ).andExpect(
                         MockMvcResultMatchers.jsonPath("$.name").value(testCompanyDtoB.getName())
                 );
+    }
+
+    @Test
+    public void testThatDeleteCompanyReturnsHttpStatus204ForNonExistingCompany() throws Exception {
+        mockMvc.perform(
+                MockMvcRequestBuilders.delete("/api/companies/99")
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(MockMvcResultMatchers.status().isNoContent());
+    }
+
+    @Test
+    public void testThatDeleteCompanyReturnsHttpStatus204ForAnExistingCompany() throws Exception {
+        Company testCompanyA = CreateTestDataUtil.createTestCompanyA();
+        Company savedCompanyA = companyService.saveCompany(testCompanyA);
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.delete("/api/companies/" + testCompanyA.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(MockMvcResultMatchers.status().isNoContent());
     }
 
 }

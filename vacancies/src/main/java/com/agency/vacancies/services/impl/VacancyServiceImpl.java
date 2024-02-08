@@ -58,4 +58,9 @@ public class VacancyServiceImpl implements VacancyService {
         }).orElseThrow(()-> new RuntimeException("Vacancy does not exist"));
     }
 
+    @Override
+    public void delete(Long id) {
+        vacancyRepository.deleteById(id);
+    }
+
 }

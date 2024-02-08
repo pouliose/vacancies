@@ -13,4 +13,6 @@ public interface CompanyService {
     Optional<Company> findOne(Long id);
 
     boolean isExists(Long id);
+
+    void delete(Long id);
 }

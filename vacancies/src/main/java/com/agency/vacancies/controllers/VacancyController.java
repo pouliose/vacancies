@@ -67,4 +67,11 @@ public class VacancyController {
                 .map(vacancyMapper::mapTo)
                 .collect(Collectors.toList());
     }
+
+    @DeleteMapping(path = "/vacancies/{id}")
+    public ResponseEntity deleteVacancy(@PathVariable("id") Long id) {
+       vacancyService.delete(id);
+
+       return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
 }

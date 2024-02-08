@@ -42,4 +42,9 @@ public class CompanyServiceImpl implements CompanyService {
     public boolean isExists(Long id) {
         return companyRepository.existsById(id);
     }
+
+    @Override
+    public void delete(Long id) {
+        companyRepository.deleteById(id);
+    }
 }
