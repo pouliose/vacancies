@@ -5,13 +5,13 @@ import com.agency.vacancies.domain.entities.Company;
 import com.agency.vacancies.mappers.Mapper;
 import com.agency.vacancies.repositories.CompanyRepository;
 import com.agency.vacancies.services.CompanyService;
+import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = "/api")
@@ -19,12 +19,15 @@ public class CompanyController {
     private CompanyService companyService;
     private Mapper<Company, CompanyDto> companyMapper;
     private final CompanyRepository companyRepository;
+    private final ModelMapper modelMapper;
 
     public CompanyController(CompanyService companyService, Mapper<Company, CompanyDto> companyMapper,
-                             CompanyRepository companyRepository) {
+                             CompanyRepository companyRepository,
+                             ModelMapper modelMapper) {
         this.companyService = companyService;
         this.companyMapper = companyMapper;
         this.companyRepository = companyRepository;
+        this.modelMapper = modelMapper;
     }
 
     @GetMapping(path = "/")
@@ -41,12 +44,9 @@ public class CompanyController {
     }
 
     @GetMapping(path = "/companies")
-    public List<CompanyDto> listCompanies() {
-        List<Company> companies = companyService.findAll();
-        return companies
-                .stream()
-                .map(companyMapper::mapTo)
-                .collect(Collectors.toList());
+    public Page<CompanyDto> getListCompanies(Pageable pageable) {
+        Page<Company> companies = companyService.findAll(pageable);
+        return companies.map(companyMapper::mapTo);
     }
 
     @GetMapping(path = "/companies/{id}")
