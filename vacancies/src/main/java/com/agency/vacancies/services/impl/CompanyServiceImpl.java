@@ -3,6 +3,8 @@ package com.agency.vacancies.services.impl;
 import com.agency.vacancies.domain.entities.Company;
 import com.agency.vacancies.repositories.CompanyRepository;
 import com.agency.vacancies.services.CompanyService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,6 +33,11 @@ public class CompanyServiceImpl implements CompanyService {
                         companyRepository.findAll().spliterator(),
                         false)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Page<Company> findAll(Pageable pageable) {
+        return companyRepository.findAll(pageable);
     }
 
     @Override
